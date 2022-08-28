@@ -25,11 +25,14 @@ async function run (url){
     const browser = await puppeteer.launch({headless:true})
 
     const page = await browser.newPage()
-    await page.goto(url, { waitUntil: 'networkidle2' })
+    await page.goto(url, {
+        waitUntil: 'networkidle0',
+      })
     const title = await page.evaluate(() => document.querySelector(".col-lg-8 > h1:nth-child(1)").textContent)
     console.log("Title : " + title)
     defaultpath = __dirname + "\\" + title.replaceAll(" ", "_")
-    console.log("We will start to download images, they will be saved in " + defaultpath)
+    console.log("We will start to download images in 10s, they will be saved in " + defaultpath)
+    await page.waitForTimeout(10000)
     const emoji = await page.evaluate(() => {
         const stickers = Array.from(document.querySelectorAll('.sahlm9h'))
         
